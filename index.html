@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kai's Birthday!</title>
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f4f4f9;
+    color: #333;
+    padding: 20px;
+    background-image: url('https://cdn.pixabay.com/photo/2016/11/18/15/47/birthday-1835449_960_720.jpg');
+    background-size: cover;  /* Makes the image cover the entire background */
+    background-repeat: no-repeat;  /* Prevents the image from repeating */
+    background-position: center center;  /* Centers the image both horizontally and vertically */
+    background-attachment: fixed;  /* Keeps the background fixed when scrolling */
+  
+}
+
+        h1 {
+            font-size: 3rem;
+            color: #ff6f61;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        }
+        #countdown {
+            font-size: 2rem;
+            margin-top: 20px;
+            color: #007bff;
+            font-weight: bold;
+        }
+        #candle {
+            margin: 20px auto;
+            width: 50px;
+            height: 100px;
+            background-color: #ff6f61;
+            border-radius: 10px;
+            position: relative;
+            cursor: pointer;
+            display: none; 
+        }
+        #candle:after {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 10px;
+            height: 20px;
+            background-color: #ffd700; 
+            border-radius: 50%;
+            box-shadow: 0 0 10px 2px rgba(255, 215, 0, 0.8); 
+        }
+        
+        
+        #candle.extinguished::after {
+            background-color: #ccc; 
+            box-shadow: 0 0 10px 2px rgba(255, 215, 0, 0); 
+        }
+
+        #reminder {
+            margin-top: 10px;
+            color: #ff6f61;
+            font-size: 1.2rem;
+            font-style: italic;
+        }
+
+        #restartButton {
+            display: none;
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            background-color: #ff6f61;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            text-transform: uppercase;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        #restartButton:hover {
+            background-color: #e55e50;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transform: scale(1.1);
+        }
+
+        #restartButton:active {
+            transform: scale(0.98);
+        }
+
+        #restartButton:before {
+            content: '🔥';
+            margin-right: 8px;
+            font-size: 1.5rem;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        #restartButton {
+            animation: fadeIn 1s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <h1>Kai's Birthday!</h1>
+    <div id="countdown">Loading...</div>
+    <div id="candle" title="Blow out the candle"></div>
+    <div id="reminder"></div>
+    <button id="restartButton">Light the Candle Again</button>
+
+    <script>
+        let countdownOver = false;
+        let candleClicked = false;
+        const candle = document.getElementById('candle');
+        const reminder = document.getElementById('reminder');
+        const restartButton = document.getElementById('restartButton');
+
+        function getNextBirthday() {
+            const now = new Date();
+            let nextBirthday = new Date('January 16, ' + now.getFullYear() + ' 00:00:00').getTime();
+            if (now.getTime() > nextBirthday) {
+                nextBirthday = new Date('January 16, ' + (now.getFullYear() + 1) + ' 00:00:00').getTime();
+            }
+            return nextBirthday;
+        }
+
+        let birthday = getNextBirthday();
+
+        function countdownToBirthday() {
+            const now = new Date().getTime();
+            const distance = birthday - now;
+
+            if (distance > 0) {
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                document.getElementById('countdown').innerHTML = 
+                    `Countdown: ${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds`;
+                
+                
+                if (!candle.style.display || candle.style.display === 'none') {
+                    candle.style.display = 'block'; 
+                }
+            } else {
+                document.getElementById('countdown').innerHTML = '<h1>The countdown has ended!</h1>';
+                countdownOver = true;
+                reminder.innerHTML = 'Don\'t forget to blow out the candle!';
+                candle.style.cursor = 'pointer'; 
+                clearInterval(interval);
+            }
+        }
+
+        candle.addEventListener('click', () => {
+            if (countdownOver && !candleClicked) {
+                reminder.innerHTML = '<br><strong>Happy Birthday, Kai! 🎉</strong>';
+                reminder.innerHTML += '<br><em>Happy Birthday, Kai! 🎉 On this special day, I want to wish you an incredible year ahead, filled with so much joy, love, and amazing experiences. May this new year of your life bring you as much happiness and light as you bring to everyone around you. You have a way of spreading positivity, and today, I hope all that love and energy comes back to you tenfold.<br><br>Remember, today marks not only the celebration of another year but also the beginning of a brand-new chapter in your life. It’s a chapter that is filled with endless possibilities and exciting opportunities. Embrace every single moment, knowing that each one is part of something bigger and greater. Keep pushing forward, keep chasing your dreams, and never stop believing in your abilities because today is not just about the moments that have passed, but about the infinite potential that the future holds.<br><br>Wishing you a year full of new adventures, growth, and endless moments of joy. May every step you take lead you closer to the happiness and success you deserve. Here\'s to an amazing year ahead, Kai—one that is as extraordinary as you are!</em>';
+
+                candle.classList.add('extinguished'); 
+                candle.style.cursor = 'not-allowed';
+                candleClicked = true;
+                reminder.innerHTML += '<br><em>The candle is extinguished. Let\'s celebrate!</em>';
+                restartButton.style.display = 'inline-block';
+            } else if (candleClicked) {
+                reminder.innerHTML += '<br><em>The candle is already extinguished!</em>';
+            }
+        });
+
+        restartButton.addEventListener('click', () => {
+            const userConfirmed = confirm('Are you sure you want to recalculate your birthday for next year?');
+            if (userConfirmed) {
+                birthday = getNextBirthday();
+                countdownOver = false;
+                candleClicked = false;
+                candle.classList.remove('extinguished'); 
+                restartButton.style.display = 'none';
+                reminder.innerHTML = '';
+                document.getElementById('countdown').innerHTML = 'Loading...';
+                clearInterval(interval);
+                setInterval(countdownToBirthday, 1000);
+            }
+        });
+
+        const interval = setInterval(countdownToBirthday, 1000);
+    </script>
+</body>
+</html>
